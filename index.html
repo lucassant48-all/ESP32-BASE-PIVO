@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitoramento torre</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <div class="brand">Machine tower monitoring</div>
+    <h1>Monitoramento Torres </h1>
+    <p>Acesso ao painel</p>
+
+    <input id="email" type="email" placeholder="E-mail">
+    <input id="password" type="password" placeholder="Senha">
+
+    <button id="loginBtn">ENTRAR</button>
+
+    <div id="loginError"></div>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+
+<header class="topbar">
+  <div class="brand-title">
+    <div class="brand">tower monitoring</div>
+    <div>
+      <h1>MONITORAMENTO TORRES</h1>
+      <span>Machine tower monitoring • Realtime </span>
+    </div>
+  </div>
+
+  <div class="top-actions">
+    <div id="firebaseStatus" class="pill red">DATABASE: OFFLINE</div>
+    <button id="logoutBtn" class="logout">SAIR</button>
+  </div>
+</header>
+
+<main>
+
+<section class="system-bar">
+
+  <div class="system-item">
+    <span class="label">BASE</span>
+    <strong id="esp32Status" class="green">OFFLINE</strong>
+  </div>
+
+  <div class="system-item">
+    <span class="label">WI-FI</span>
+    <strong id="wifiStatus" class="red-text">DESCONECTADO</strong>
+  </div>
+
+  <div class="system-item">
+    <span class="label">IP</span>
+    <strong id="esp32IP">---</strong>
+  </div>
+
+  <div class="system-item">
+    <span class="label">RSSI</span>
+    <strong id="esp32RSSI">---</strong>
+  </div>
+
+  <div class="system-item">
+    <span class="label">ÚLTIMA COMUNICAÇÃO</span>
+    <strong id="systemLastSeen">---</strong>
+  </div>
+
+</section>
+
+<section class="dashboard">
+
+  <div class="section-title">
+    <div>
+      <h2>TRANSMISSORES</h2>
+      <span>Estado e comunicação em tempo real</span>
+    </div>
+  </div>
+
+  <div class="tx-grid">
+
+    <article class="tx-card offline" id="card-tx1">
+      <div class="tx-head">
+        <div>
+          <span class="machine">TRANSMISSOR</span>
+          <h3>T-1</h3>
+        </div>
+        <span class="status" id="status-tx1">OFFLINE</span>
+      </div>
+
+      <div class="big-state" id="state-tx1">OFF</div>
+
+      <div class="data-row">
+        <span>COMUNICAÇÃO</span>
+        <strong id="comm-tx1">OFFLINE</strong>
+      </div>
+
+      <div class="data-row">
+        <span>ÚLTIMO CONTATO</span>
+        <strong id="last-tx1">NUNCA</strong>
+      </div>
+    </article>
+
+    <article class="tx-card offline" id="card-tx2">
+      <div class="tx-head">
+        <div>
+          <span class="machine">TRANSMISSOR</span>
+          <h3>T-2</h3>
+        </div>
+        <span class="status" id="status-tx2">OFFLINE</span>
+      </div>
+
+      <div class="big-state" id="state-tx2">OFF</div>
+
+      <div class="data-row">
+        <span>COMUNICAÇÃO</span>
+        <strong id="comm-tx2">OFFLINE</strong>
+      </div>
+
+      <div class="data-row">
+        <span>ÚLTIMO CONTATO</span>
+        <strong id="last-tx2">NUNCA</strong>
+      </div>
+    </article>
+
+    <article class="tx-card offline" id="card-tx3">
+      <div class="tx-head">
+        <div>
+          <span class="machine">TRANSMISSOR</span>
+          <h3>T-3</h3>
+        </div>
+        <span class="status" id="status-tx3">OFFLINE</span>
+      </div>
+
+      <div class="big-state" id="state-tx3">OFF</div>
+
+      <div class="data-row">
+        <span>COMUNICAÇÃO</span>
+        <strong id="comm-tx3">OFFLINE</strong>
+      </div>
+
+      <div class="data-row">
+        <span>ÚLTIMO CONTATO</span>
+        <strong id="last-tx3">NUNCA</strong>
+      </div>
+    </article>
+
+    <article class="tx-card offline" id="card-tx4">
+      <div class="tx-head">
+        <div>
+          <span class="machine">TRANSMISSOR</span>
+          <h3>T-4</h3>
+        </div>
+        <span class="status" id="status-tx4">OFFLINE</span>
+      </div>
+
+      <div class="big-state" id="state-tx4">OFF</div>
+
+      <div class="data-row">
+        <span>COMUNICAÇÃO</span>
+        <strong id="comm-tx4">OFFLINE</strong>
+      </div>
+
+      <div class="data-row">
+        <span>ÚLTIMO CONTATO</span>
+        <strong id="last-tx4">NUNCA</strong>
+      </div>
+    </article>
+
+  </div>
+
+</section>
+
+<section class="analytics">
+
+  <div class="panel chart-panel">
+    <div class="panel-head">
+      <div>
+        <h2>HISTÓRICO</h2>
+        <span>Alterações de estado dos transmissores</span>
+      </div>
+
+      <select id="chartTx">
+        <option value="1">T1</option>
+        <option value="2">T2</option>
+        <option value="3">T3</option>
+        <option value="4">T4</option>
+      </select>
+    </div>
+
+    <div class="chart-wrap">
+      <canvas id="historyChart"></canvas>
+    </div>
+  </div>
+
+  <div class="panel events-panel">
+    <div class="panel-head">
+      <div>
+        <h2>REGISTRO DE EVENTOS</h2>
+        <span>Eventos mais recentes</span>
+      </div>
+    </div>
+
+    <div id="eventsList" class="events-list">
+      <div class="empty">Aguardando eventos...</div>
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  Base • Machine tower  •  monitoring Realtime
+</footer>
+
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
